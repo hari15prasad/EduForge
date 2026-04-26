@@ -15,6 +15,7 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 # Internal imports
@@ -223,6 +224,13 @@ def delete_session(session_id: str) -> dict[str, str]:
         raise HTTPException(status_code=404, detail="Session not found.")
     del _sessions[session_id]
     return {"deleted": session_id}
+
+# ---------------------------------------------------------------------------
+# Hugging Face Spaces Entrypoint (Frontend & Backend)
+# ---------------------------------------------------------------------------
+# We mount the static files LAST so they don't mask the API endpoints above
+if os.path.exists("frontend_static"):
+    app.mount("/", StaticFiles(directory="frontend_static", html=True), name="static")
 
 # ---------------------------------------------------------------------------
 # Hugging Face Spaces entry point

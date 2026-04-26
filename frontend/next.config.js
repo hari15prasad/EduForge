@@ -1,16 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Proxy /api/* → FastAPI backend (uvicorn on :7860)
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'http://localhost:7860/:path*',
-      },
-    ];
+  output: 'export', // Required for static export to 'out' directory
+  images: {
+    unoptimized: true, // Required for static export
   },
-  // Suppress the lockfile workspace root warning
-  experimental: {},
+  // Note: rewrites are only used for local development 'npm run dev'
+  // In production (Hugging Face), FastAPI will serve the static files
 };
 
-module.exports = nextConfig;
+module.exports = nextConfig;
