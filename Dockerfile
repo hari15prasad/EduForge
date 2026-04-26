@@ -1,12 +1,10 @@
 # Use a multi-stage build to keep the image small
 FROM node:20-alpine AS frontend-builder
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend/ ./
-# We set the API URL to the relative path since they will share the same origin
-ENV NEXT_PUBLIC_API_URL=/api
-RUN npm run build
+WORKDIR /app
+COPY frontend/package*.json ./frontend/
+RUN cd frontend && npm install
+COPY frontend/ ./frontend/
+RUN cd frontend && npm run build
 
 # Final stage: Python for the FastAPI backend
 FROM python:3.10-slim
