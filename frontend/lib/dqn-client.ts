@@ -270,33 +270,33 @@ function generateTutoringResponse(userText: string, action: ActionType): string 
   }
 
   // ── Variables ────────────────────────────────────────────────────────────
-  if (lower.includes("variable")) {
-    return "A **variable** is a named container that stores a value in memory.\n\n```python\nstudent_name = 'Alice'   # stores text\nscore = 95               # stores a number\nis_passing = True        # stores true/false\n```\n\nYou can change the value any time — that's why it's called a *variable* (it can vary).";
+  if (/\\b(variable|variables)\\b/.test(lower)) {
+    return "A **variable** is a named container that stores a value in memory.\\n\\n```python\\nstudent_name = 'Alice'   # stores text\\nscore = 95               # stores a number\\nis_passing = True        # stores true/false\\n```\\n\\nYou can change the value any time — that's why it's called a *variable* (it can vary).";
   }
 
   // ── Loops ────────────────────────────────────────────────────────────────
-  if (lower.includes("loop") || lower.includes("for loop") || lower.includes("while loop")) {
-    return "A **loop** repeats a block of code automatically.\n\n**For loop** — when you know how many times:\n```python\nfor i in range(5):\n    print(i)  # prints 0, 1, 2, 3, 4\n```\n\n**While loop** — when you repeat until a condition is false:\n```python\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n```\n\nWhich type of loop are you working with?";
+  if (/\\b(loop|loops|for loop|while loop)\\b/.test(lower)) {
+    return "A **loop** repeats a block of code automatically.\\n\\n**For loop** — when you know how many times:\\n```python\\nfor i in range(5):\\n    print(i)  # prints 0, 1, 2, 3, 4\\n```\\n\\n**While loop** — when you repeat until a condition is false:\\n```python\\ncount = 0\\nwhile count < 5:\\n    print(count)\\n    count += 1\\n```\\n\\nWhich type of loop are you working with?";
   }
 
   // ── Functions / Methods ──────────────────────────────────────────────────
-  if (lower.includes("function") || lower.includes("def ")) {
-    return "A **function** is a reusable block of code that does one specific job.\n\n```python\ndef greet(name):\n    return f'Hello, {name}!'\n\nprint(greet('Alice'))  # Hello, Alice!\n```\n\nFunctions help you avoid repeating code — write once, call many times. What do you want your function to do?";
+  if (/\\b(function|functions|def)\\b/.test(lower)) {
+    return "A **function** is a reusable block of code that does one specific job.\\n\\n```python\\ndef greet(name):\\n    return f'Hello, {name}!'\\n\\nprint(greet('Alice'))  # Hello, Alice!\\n```\\n\\nFunctions help you avoid repeating code — write once, call many times. What do you want your function to do?";
   }
 
   // ── Recursion ────────────────────────────────────────────────────────────
-  if (lower.includes("recursion") || lower.includes("recursive")) {
-    return "**Recursion** is when a function calls itself to solve a smaller version of the same problem.\n\n```python\ndef factorial(n):\n    if n == 0:       # base case — stops the recursion\n        return 1\n    return n * factorial(n - 1)  # recursive call\n\nprint(factorial(5))  # 120\n```\n\nEvery recursive solution needs: (1) a **base case** to stop, (2) a **recursive step** that moves toward it.";
+  if (/\\b(recursion|recursive)\\b/.test(lower)) {
+    return "**Recursion** is when a function calls itself to solve a smaller version of the same problem.\\n\\n```python\\ndef factorial(n):\\n    if n == 0:       # base case — stops the recursion\\n        return 1\\n    return n * factorial(n - 1)  # recursive call\\n\\nprint(factorial(5))  # 120\\n```\\n\\nEvery recursive solution needs: (1) a **base case** to stop, (2) a **recursive step** that moves toward it.";
   }
 
   // ── Sorting ──────────────────────────────────────────────────────────────
-  if (lower.includes("sort") || lower.includes("bubble sort") || lower.includes("merge sort")) {
-    return "**Sorting** algorithms arrange data in order. The most common:\n\n| Algorithm | Best | Worst | Space |\n|---|---|---|---|\n| Bubble Sort | O(n) | O(n²) | O(1) |\n| Merge Sort | O(n log n) | O(n log n) | O(n) |\n| Quick Sort | O(n log n) | O(n²) | O(log n) |\n\nIn Python, use `sorted(list)` for a new sorted list, or `list.sort()` to sort in place. Which algorithm would you like to understand deeper?";
+  if (/\\b(sort|sorting|bubble sort|merge sort|quick sort)\\b/.test(lower)) {
+    return "**Sorting** algorithms arrange data in order. The most common:\\n\\n| Algorithm | Best | Worst | Space |\\n|---|---|---|---|\\n| Bubble Sort | O(n) | O(n²) | O(1) |\\n| Merge Sort | O(n log n) | O(n log n) | O(n) |\\n| Quick Sort | O(n log n) | O(n²) | O(log n) |\\n\\nIn Python, use `sorted(list)` for a new sorted list, or `list.sort()` to sort in place. Which algorithm would you like to understand deeper?";
   }
 
   // ── OOP / Classes ────────────────────────────────────────────────────────
-  if (lower.includes("class") || lower.includes("object") || lower.includes("oop")) {
-    return "**Object-Oriented Programming (OOP)** models real-world entities as objects.\n\n```python\nclass Student:\n    def __init__(self, name, grade):\n        self.name = name\n        self.grade = grade\n\n    def is_passing(self):\n        return self.grade >= 60\n\ns = Student('Alice', 85)\nprint(s.is_passing())  # True\n```\n\nKey ideas: **Class** = blueprint, **Object** = instance, **Method** = function inside a class. What aspect of OOP are you exploring?";
+  if (/\\b(oop|object oriented)\\b/.test(lower) || ( /\\b(class|object)\\b/.test(lower) && /\\b(programming|code|python|java|c\\+\\+|oop)\\b/.test(lower) )) {
+    return "**Object-Oriented Programming (OOP)** models real-world entities as objects.\\n\\n```python\\nclass Student:\\n    def __init__(self, name, grade):\\n        self.name = name\\n        self.grade = grade\\n\\n    def is_passing(self):\\n        return self.grade >= 60\\n\\ns = Student('Alice', 85)\\nprint(s.is_passing())  # True\\n```\\n\\nKey ideas: **Class** = blueprint, **Object** = instance, **Method** = function inside a class. What aspect of OOP are you exploring?";
   }
 
   // ── Strategy-based generic response ──────────────────────────────────────
