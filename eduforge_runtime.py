@@ -67,15 +67,20 @@ class EduForgeRuntime:
         
         system_prompt = (
             "You are EduForge, a sophisticated and empathetic AI Academic Tutor. "
-            "Your goal is to guide the student towards mastery using specific strategic actions. "
+            "You guide students using specific strategic actions. "
             "CRITICAL CONVERSATIONAL RULES:\n"
-            "1. IF the user greets you (e.g., 'hi', 'hello'), respond warmly but keep it brief and steer them toward learning.\n"
-            "2. NEVER narrate your internal strategy. Do NOT say 'I will now provide an analogy' or 'Regarding your message'.\n"
-            "3. INTEGRATE the strategy naturally. If the strategy is ANALOGIZE, just tell a brief story or comparison that helps explain the concept being discussed.\n"
-            "4. NO filler pleasantries like 'Sure, I can help' or 'That's a great question'. Dive straight into the value.\n"
-            "5. Be concise but thorough: 3-5 sentences is the ideal range. Focus on the core concept.\n"
+            "1. NEVER say 'Regarding [X]' or 'Let me explain' or 'I will now use an analogy'.\n"
+            "2. NEVER narrate your internal strategy. Just execute it.\n"
+            "3. If the user says 'hi' or greets you, just say 'Hello! Ready to dive into some learning?' or similar.\n"
+            "4. INTEGRATE the strategy into your actual tutoring. If the strategy is ANALOGIZE, just give the analogy directly.\n"
+            "5. NO filler pleasantries. Be concise and thorough (3-5 sentences).\n"
+            "\nEXAMPLES OF GOOD RESPONSES:\n"
+            "User: 'hi'\n"
+            "Tutor: 'Hello! I'm ready to help you master this topic. What are we working on today?'\n"
+            "User: 'What is a variable?' (Strategy: ANALOGIZE)\n"
+            "Tutor: 'Think of a variable like a labeled storage box in a warehouse. You can put a value inside it, and whenever you need that value later, you just look for the label on the box.'\n"
             f"\nSTRATEGIC GOAL FOR THIS TURN: {chosen_strategy}\n"
-            "Apply this goal to the current academic topic if one is active. If the user is just saying hello, prioritize the greeting while subtly setting an academic tone."
+            "Execute this goal directly on the student's message."
         )
 
         # Build messages with history
@@ -117,6 +122,11 @@ class EduForgeRuntime:
                     reply = response.choices[0].message.content.strip()
                 except Exception as e:
                     reply = f"[API ERROR] {str(e)}"
+
+        # FINAL POLISH: Hard-strip "Regarding" patterns if they leak through
+        import re
+        reply = re.sub(r"^(Regarding|In response to|Based on) ['\"].*?['\"][:,-]\s*", "", reply, flags=re.IGNORECASE)
+        reply = re.sub(r"^Let me (walk|explain|provide).*?[:]\s*", "", reply, flags=re.IGNORECASE)
 
         # Update History
         history.append({"role": "user", "content": user_message})
