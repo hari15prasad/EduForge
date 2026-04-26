@@ -1,0 +1,49 @@
+Question,Chosen Strategy,Tutor Response,Accuracy,Style,Scaffolding,CFU,Feedback,Suggested Improvement
+I don't understand how recursion works. It just looks like an infinite loop.,CORRECT_FACT,"Let's use an analogy to understand recursion better.
+
+**ANALOGIZE**
+
+Imagine you're a librarian in a vast library with an infinite number of books on the shelves. Each book has a note that says, ""Find the next book with the same title."" Your task is to find the book with the title ""Harry Potter.""
+
+Here's how recursion works:
+
+1. You pick a book from the shelf and check its title. If it's not ""Harry Potter,"" you look at the note and see that it says, ""Find the next book with the same title."" You then go back to the shelf and pick a new book to check.
+2. This process repeats: you check the title, look at the note, and go back",4,5,3,0,"The response is mostly accurate in explaining recursion, using a creative and engaging analogy. However, it does not fully avoid giving away the concept immediately and lacks a follow-up question to check the student's understanding. The tone is encouraging and helpful, making the explanation more approachable.","The tutor could have added, 'Now, can you think of how this library analogy translates into a recursive function in programming, and how the base case would prevent an infinite loop?'"
+How does a binary search work? I keep getting index out of bounds.,CORRECT_FACT,"Let's break down binary search step-by-step.
+
+**ANALOGIZE**
+Imagine you're looking for a specific book in a library with a vast collection of books. The library has a very efficient system where the books are organized in a way that the first half of the books are on one side of the room and the second half on the other. When you ask a librarian where the book is, they ask you a simple question: ""Is the book you're looking for after the middle shelf?"" If you say yes, they direct you to the second half of the books. If you say no, they direct you to the first half.
+
+**WORKED_EXAMPLE**
+
+Let's say we're searching for the number 7 in a sorted",4,5,3,2,"The response accurately explains the concept of binary search using a relatable analogy, which is excellent for pedagogical style. However, the worked example seems incomplete and does not directly address the 'index out of bounds' issue the student is facing, affecting technical accuracy and scaffolding. The response also lacks a follow-up question to check for understanding.","The model could have added, 'Now, can you think of how this process of dividing the search space in half relates to preventing index out of bounds errors in your code?' to improve guidance and check for understanding."
+What is the difference between an Array and a Linked List?,CORRECT_FACT,"Let's use an analogy to understand the difference between an Array and a Linked List:
+
+**Array is like a Parking Lot**
+
+Imagine you have a big parking lot with a fixed number of parking spaces. Each space can hold one car, and the spaces are labeled with numbers (e.g., 1, 2, 3, ...). When you park a car in the lot, you have to find an empty space and put the car in it. If you want to add more cars, you have to find an empty space and put the car in it.
+
+Now, imagine you want to add a new car to the parking lot. If the parking lot is full, you have to remove a car from one of the spaces and then add",4,5,3,0,"The response accurately explains the concept of an array using a parking lot analogy, which is pedagogically effective. However, the explanation of a linked list is missing, and the response does not guide the student toward understanding the difference between the two data structures. Additionally, the response does not end with a follow-up question to test the student's knowledge.","The tutor could have added a sentence like 'Can you think of how a linked list would be different from this parking lot scenario, and how would you implement it in code?' to encourage the student to think critically and guide them toward the solution."
+Why is QuickSort considered faster than Bubble Sort if both use loops?,CORRECT_FACT,"Let's break this down step by step.
+
+**ANALOGIZE**
+
+Think of a library with millions of books. Imagine you want to organize them alphabetically. 
+
+- In Bubble Sort, it's like searching for a specific book, then checking the next one, and the next, until you find the correct spot to put the book you're looking for. This process is repeated for every book. It's time-consuming and inefficient.
+
+- In QuickSort, it's like dividing the books into smaller sections, like A-M and N-Z, and then organizing each section separately. This makes it much faster and more efficient.
+
+**WORKED_EXAMPLE**
+
+Here's an example of how QuickSort works:
+
+Suppose we have the following list of",4,5,3,2,"The response accurately explains the difference between QuickSort and Bubble Sort using a relatable analogy, showcasing a strong pedagogical style. However, it lacks a clear, step-by-step guide on how QuickSort is implemented and does not end with a follow-up question to check the student's understanding. The scaffolding could be improved by providing more intermediate steps or prompts for the student to work through.","The model could have added, 'Can you now think of a scenario where QuickSort would be particularly beneficial over Bubble Sort, and explain why?' to encourage critical thinking and check for understanding."
+I'm confused by Big O notation. Does O(n) mean it takes n seconds?,CORRECT_FACT,"Let's use an analogy to understand Big O notation.
+
+Imagine you're at a restaurant and you order food. The chef has to prepare your meal. 
+
+* O(1) is like a 5-star restaurant with a single chef who can prepare your meal instantly. No matter how many people are waiting, the chef can serve you quickly. This is like a constant time complexity.
+* O(n) is like a buffet with n chefs who prepare your meal. The more people waiting, the longer it takes to serve. But, each chef can prepare a meal independently. This is like a linear time complexity.
+
+O(n) doesn't mean it takes n seconds, but rather, the time it takes to complete a task grows linearly with the",5,5,4,0,"The response accurately explains Big O notation using relatable analogies, making it easy for the student to understand. The tone is helpful and encouraging. However, the response could be improved by guiding the student toward the solution more gradually and ending with a follow-up question to test the student's knowledge.","Can you think of a scenario where O(n) would be more efficient than O(1), and how would you apply this knowledge to a real-world problem?"

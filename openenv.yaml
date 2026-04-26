@@ -1,0 +1,13 @@
+spec_version: "1"
+name: eduforge-env
+version: 1.0.0
+description: A multi-head pedagogical tutoring environment that simulates student states (confusion, attention) to train RL tutoring policies.
+entry_point: src.environment.openenv_wrapper:EduForgeEnv
+dependencies:
+  - gymnasium>=0.29.1
+  - numpy>=1.26.4
+tags:
+  - education
+  - reinforcement-learning
+  - tutoring
+  - student-simulation
