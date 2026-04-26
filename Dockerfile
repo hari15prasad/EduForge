@@ -27,7 +27,7 @@ RUN pip install uvicorn gunicorn
 COPY . .
 
 # Copy built frontend to a public directory
-COPY --from frontend-builder /app/frontend/out /app/frontend_static
+COPY --from=frontend-builder /app/frontend/out /app/frontend_static
 
 # Create a small script to serve the frontend and backend together
 RUN echo '#!/bin/bash\n\
