@@ -1,5 +1,5 @@
 # Use a multi-stage build to keep the image small
-FROM node:18-alpine AS frontend-builder
+FROM node:20-alpine AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install
