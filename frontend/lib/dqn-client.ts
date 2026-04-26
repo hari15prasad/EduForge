@@ -222,7 +222,102 @@ async function callHybridBackend(
   }
 }
 
+// ── Smart Tutoring Response Engine ───────────────────────────────────────────
+// Used as a fallback when the backend is unavailable.
+// Generates real, helpful tutoring answers instead of generic canned text.
+
+function generateTutoringResponse(userText: string, action: ActionType): string {
+  const q = userText.trim();
+  const lower = q.toLowerCase();
+
+  // ── Greetings ────────────────────────────────────────────────────────────
+  if (/^(hi|hello|hey|sup|greetings|howdy)\b/i.test(lower)) {
+    return "Hello! I'm EduForge, your AI tutor. What topic would you like to explore today? I can help with math, coding, science, and more!";
+  }
+
+  // ── Arithmetic ───────────────────────────────────────────────────────────
+  const sqrtMatch = lower.match(/square\s*root\s*of\s*(\d+(\.\d+)?)/);
+  if (sqrtMatch) {
+    const n = parseFloat(sqrtMatch[1]);
+    return `The square root of ${n} is **${Math.sqrt(n).toFixed(4)}**.\n\nTo verify: ${Math.sqrt(n).toFixed(4)} × ${Math.sqrt(n).toFixed(4)} ≈ ${n}.`;
+  }
+
+  const addMatch = lower.match(/(\d+)\s*\+\s*(\d+)/);
+  if (addMatch) {
+    const result = parseInt(addMatch[1]) + parseInt(addMatch[2]);
+    return `${addMatch[1]} + ${addMatch[2]} = **${result}**.`;
+  }
+
+  const mulMatch = lower.match(/(\d+)\s*[×x\*]\s*(\d+)/);
+  if (mulMatch) {
+    const result = parseInt(mulMatch[1]) * parseInt(mulMatch[2]);
+    return `${mulMatch[1]} × ${mulMatch[2]} = **${result}**.`;
+  }
+
+  // ── Binomial / Expansion ─────────────────────────────────────────────────
+  if (lower.includes("binomial")) {
+    const nMatch = lower.match(/n\s*=\s*(\d+)/);
+    const nVal = nMatch ? parseInt(nMatch[1]) : null;
+    let resp = "The **Binomial Theorem** states that:\n\n**(a + b)ⁿ = Σ C(n,k) · aⁿ⁻ᵏ · bᵏ** for k = 0 to n\n\nwhere C(n,k) = n! / (k!(n-k)!) is the binomial coefficient.";
+    if (nVal !== null) {
+      resp += `\n\nFor **n = ${nVal}**, the expansion of (a+b)${nVal} has ${nVal + 1} terms:`;
+      for (let k = 0; k <= nVal; k++) {
+        const coef = factorial(nVal) / (factorial(k) * factorial(nVal - k));
+        resp += `\n  • k=${k}: **${coef}** · a^${nVal - k} · b^${k}`;
+      }
+    }
+    return resp;
+  }
+
+  // ── Variables ────────────────────────────────────────────────────────────
+  if (lower.includes("variable")) {
+    return "A **variable** is a named container that stores a value in memory.\n\n```python\nstudent_name = 'Alice'   # stores text\nscore = 95               # stores a number\nis_passing = True        # stores true/false\n```\n\nYou can change the value any time — that's why it's called a *variable* (it can vary).";
+  }
+
+  // ── Loops ────────────────────────────────────────────────────────────────
+  if (lower.includes("loop") || lower.includes("for loop") || lower.includes("while loop")) {
+    return "A **loop** repeats a block of code automatically.\n\n**For loop** — when you know how many times:\n```python\nfor i in range(5):\n    print(i)  # prints 0, 1, 2, 3, 4\n```\n\n**While loop** — when you repeat until a condition is false:\n```python\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n```\n\nWhich type of loop are you working with?";
+  }
+
+  // ── Functions / Methods ──────────────────────────────────────────────────
+  if (lower.includes("function") || lower.includes("def ")) {
+    return "A **function** is a reusable block of code that does one specific job.\n\n```python\ndef greet(name):\n    return f'Hello, {name}!'\n\nprint(greet('Alice'))  # Hello, Alice!\n```\n\nFunctions help you avoid repeating code — write once, call many times. What do you want your function to do?";
+  }
+
+  // ── Recursion ────────────────────────────────────────────────────────────
+  if (lower.includes("recursion") || lower.includes("recursive")) {
+    return "**Recursion** is when a function calls itself to solve a smaller version of the same problem.\n\n```python\ndef factorial(n):\n    if n == 0:       # base case — stops the recursion\n        return 1\n    return n * factorial(n - 1)  # recursive call\n\nprint(factorial(5))  # 120\n```\n\nEvery recursive solution needs: (1) a **base case** to stop, (2) a **recursive step** that moves toward it.";
+  }
+
+  // ── Sorting ──────────────────────────────────────────────────────────────
+  if (lower.includes("sort") || lower.includes("bubble sort") || lower.includes("merge sort")) {
+    return "**Sorting** algorithms arrange data in order. The most common:\n\n| Algorithm | Best | Worst | Space |\n|---|---|---|---|\n| Bubble Sort | O(n) | O(n²) | O(1) |\n| Merge Sort | O(n log n) | O(n log n) | O(n) |\n| Quick Sort | O(n log n) | O(n²) | O(log n) |\n\nIn Python, use `sorted(list)` for a new sorted list, or `list.sort()` to sort in place. Which algorithm would you like to understand deeper?";
+  }
+
+  // ── OOP / Classes ────────────────────────────────────────────────────────
+  if (lower.includes("class") || lower.includes("object") || lower.includes("oop")) {
+    return "**Object-Oriented Programming (OOP)** models real-world entities as objects.\n\n```python\nclass Student:\n    def __init__(self, name, grade):\n        self.name = name\n        self.grade = grade\n\n    def is_passing(self):\n        return self.grade >= 60\n\ns = Student('Alice', 85)\nprint(s.is_passing())  # True\n```\n\nKey ideas: **Class** = blueprint, **Object** = instance, **Method** = function inside a class. What aspect of OOP are you exploring?";
+  }
+
+  // ── Strategy-based generic response ──────────────────────────────────────
+  const strategyResponses: Record<ActionType, string> = {
+    explain:        `Great question! Let me break down **"${q}"** clearly.\n\n${pickMessage("explain")}\n\nDo you want me to go deeper into any part of this?`,
+    correct_fact:   `Let's make sure we have the right foundation for **"${q}"**.\n\n${pickMessage("correct_fact")}\n\nWhat specifically are you unsure about?`,
+    worked_example: `The best way to understand **"${q}"** is through an example.\n\n${pickMessage("worked_example")}\n\nWould you like to try a similar problem yourself?`,
+    analogize:      `Think of **"${q}"** this way:\n\n${pickMessage("analogize")}\n\nDoes that analogy help clarify things?`,
+    question:       `Before I answer **"${q}"**, let me ask you: ${pickMessage("question")}\n\nYour thinking will help me tailor the best explanation.`,
+  };
+
+  return strategyResponses[action];
+}
+
+function factorial(n: number): number {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
 // ── Public client ─────────────────────────────────────────────────────────────
+
 
 export class DQNClient {
   private _episodeLog: EpisodeSummary[] = [];
@@ -322,30 +417,14 @@ export class DQNClient {
       });
     }
     
-    // Generate contextual response if user text is provided
+    // Generate a real tutoring response when backend is unavailable
     let generated_text;
     let handling_score;
     if (userText) {
-      const lowerInput = userText.toLowerCase();
-      handling_score = Math.floor(rand(75, 98));
-      
-      // Math handling
-      const mathMatch = lowerInput.match(/square root of (\d+)/);
-      if (mathMatch) {
-        const num = parseInt(mathMatch[1]);
-        generated_text = `The square root of ${num} is ${Math.sqrt(num)}.`;
-        handling_score = 99;
-      } else if (lowerInput.match(/what is (\d+) \+ (\d+)/)) {
-        const m = lowerInput.match(/what is (\d+) \+ (\d+)/);
-        if (m) generated_text = `The sum of ${m[1]} and ${m[2]} is ${parseInt(m[1]) + parseInt(m[2])}.`;
-        handling_score = 99;
-      } else if (lowerInput.includes("what is") || lowerInput.includes("how to")) {
-        const topic = lowerInput.replace(/what is |how to |explain /g, '').replace('?', '');
-        generated_text = `Let's talk about ${topic}. ${pickMessage(action)}`;
-      } else {
-        generated_text = `Regarding "${userText}": ${pickMessage(action)}`;
-      }
+      handling_score = 65;
+      generated_text = generateTutoringResponse(userText, action);
     }
+
 
     return {
       action,

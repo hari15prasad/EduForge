@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 token = os.getenv("HF_TOKEN")
-repo_id = "Hari15prasad/eduforge"
+repo_id = "Hari15prasad/EduForge"
 
 api = HfApi()
 
